@@ -1,14 +1,27 @@
 using System;
 using VisionPoints.Preprocessing;
+using VisionPoints.Skills;
 
 namespace VisionPoints
 {
    abstract class Skill
     {
-        protected List<double> difficulties = new List<double>();
+        public List<double> difficulties = new List<double>();
+
         protected virtual double skillMultiplier => 0;
+
+        protected double? cachedDifficulty;
+
         public double LastDifficulty => difficulties.Last();
-        public abstract void Process(DifficultyObject obj, List<Skill> processedSkills);
-        public abstract double DifficultyValue();
+
+        public abstract void Process(DifficultyObject obj, SkillsHandler skills);
+
+        protected abstract double DifficultyValue();
+
+        public double Difficulty
+        {
+            get => cachedDifficulty == null ? (cachedDifficulty = DifficultyValue()).Value : cachedDifficulty.Value;
+            set => cachedDifficulty = value;
+        }
     }
 }

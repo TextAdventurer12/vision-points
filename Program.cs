@@ -13,7 +13,7 @@ namespace VisionPoints
         public static void Main(string[] args)
         {
             Beatmap beatmap = BeatmapDecoder.Decode("beatmaps/652412 Hanasaka Yui(CV M.A.O) - Harumachi Clover/Hanasaka Yui(CV M.A.O) - Harumachi Clover (ezek) [Normal].osu");
-            IEnumerable<DifficultyObject> diffObjects = DifficultyObject.CreateDifficultyObjects(beatmap.HitObjects);
+            List<DifficultyObject> diffObjects = DifficultyObject.CreateDifficultyObjects(beatmap.HitObjects);
             Console.WriteLine(VisionPointsCalculator.CalculatePerformance(diffObjects).Total);
         }
     }

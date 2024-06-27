@@ -7,28 +7,24 @@ namespace VisionPoints
     class VisionPointsCalculator
     {
         public double SnapAim;
+        public double FlowAim;
         public double Total;
-        public VisionPointsCalculator(double SnapAim, double Total)
+        public static VisionPointsCalculator CalculatePerformance(List<DifficultyObject> difficultyObjects)
         {
-            this.SnapAim = SnapAim;
-            this.Total = Total;
-        }
-        public static VisionPointsCalculator CalculatePerformance(IEnumerable<DifficultyObject> difficultyObjects)
-        {
-            Skill[] skills = { new SnapAim(), };
+            SkillsHandler skills = new SkillsHandler(new SnapAim(), new FlowAim());
             foreach (var difficultyObject in difficultyObjects)
             {
-                List<Skill> processedSkills = new List<Skill>();
-                foreach (Skill skill in skills)
+                foreach (Skill skill in skills.ToList())
                 {
-                    skill.Process(difficultyObject, processedSkills);
-                    processedSkills.Add(skill);
+                    skill.Process(difficultyObject, skills);
                 }
             }
-            return new VisionPointsCalculator(
-                skills[0].DifficultyValue(),
-                skills.Sum(skill => skill.DifficultyValue())
-            );
+            return new VisionPointsCalculator()
+            {
+                SnapAim = skills.snapAim.Difficulty,
+                FlowAim = skills.flowAim.Difficulty,
+                Total = skills.ToList().Sum(skill => skill.Difficulty)
+            };
         }
     }
 }
